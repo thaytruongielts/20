@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn tập tiếng Anh vào 10 - 20 Short Answers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 25px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        p.intro {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .question-box {
+            margin-bottom: 20px;
+            padding: 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+        .question-box:hover {
+            border-color: #a0a0a0;
+        }
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .answer-input {
+            width: 70%;
+            padding: 10px;
+            margin-right: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .check-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .check-btn:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        .correct {
+            color: #28a745;
+        }
+        .incorrect {
+            color: #dc3545;
+        }
+        .summary {
+            margin-top: 40px;
+            text-align: center;
+            padding: 25px;
+            border: 3px dashed #1a73e8;
+            border-radius: 10px;
+            background-color: #e8f0fe;
+        }
+        #scoreDisplay {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn tập tiếng Anh vào 10 - Short Answers</h1>
+    <p class="intro">Hãy trả lời 20 câu hỏi dưới đây. Sau khi trả lời xong mỗi câu, nhấn "Kiểm tra".</p>
+
+    <div id="quiz-container">
+        </div>
+
+    <div class="summary" id="summary-section" style="display:none;">
+        <h2>Kết quả cuối cùng</h2>
+        <p>Bạn đã hoàn thành 20 câu hỏi.</p>
+        <div id="scoreDisplay"></div>
+    </div>
+</div>
+
+<script>
+    // Định nghĩa 20 câu hỏi và đáp án đúng
+    const quizData = [
+        { question: "What is the past simple of 'eat'?", answer: "ate" },
+        { question: "Fill in the blank: I wish I ____ fly.", answer: "could" },
+        { question: "What is the comparative form of 'expensive'?", answer: "more expensive" },
+        { question: "The Great Wall is in which country?", answer: "China" },
+        { question: "What is the opposite of 'dark'?", answer: "light" },
+        { question: "Change the verb to 'V-ing' form: 'write'", answer: "writing" },
+        { question: "What is the superlative form of 'small'?", answer: "smallest" },
+        { question: "Fill in the blank: My brother is good ____ playing soccer.", answer: "at" },
+        { question: "What is the past participle of 'do'?", answer: "done" },
+        { question: "What does 'CD' stand for?", answer: "compact disc" },
+        { question: "What is the past simple of 'read'?", answer: "read" },
+        { question: "The Statue of Liberty is in which country?", answer: "America" },
+        { question: "What is the opposite of 'polite'?", answer: "impolite" },
+        { question: "Complete the sentence: 'A friend in need is a friend ____'", answer: "indeed" },
+        { question: "What is the comparative form of 'bad'?", answer: "worse" },
+        { question: "Change the verb to 'V-ing' form: 'lie'", answer: "lying" },
+        { question: "What is the first day of the week?", answer: "Sunday" },
+        { question: "The Pacific Ocean is the world's largest ____.", answer: "ocean" },
+        { question: "What is the past simple of 'sleep'?", answer: "slept" },
+        { question: "What does 'UNICEF' stand for?", answer: "United Nations International Children's Emergency Fund" }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const summarySection = document.getElementById('summary-section');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    let correctAnswersCount = 0;
+    let questionsAnswered = 0;
+
+    // Hàm tạo và hiển thị câu hỏi
+    function createQuestionElement(data, index) {
+        const questionBox = document.createElement('div');
+        questionBox.className = 'question-box';
+        questionBox.innerHTML = `
+            <div class="question-text">Câu ${index + 1}: ${data.question}</div>
+            <input type="text" id="answer-${index}" class="answer-input" placeholder="Nhập câu trả lời">
+            <button class="check-btn" onclick="checkAnswer(${index})">Kiểm tra</button>
+            <div id="result-${index}" class="result"></div>
+        `;
+        quizContainer.appendChild(questionBox);
+    }
+
+    // Lặp qua mảng quizData để tạo từng câu hỏi
+    quizData.forEach((question, index) => {
+        createQuestionElement(question, index);
+    });
+
+    // Hàm kiểm tra câu trả lời
+    function checkAnswer(index) {
+        if (questionsAnswered >= quizData.length) {
+            return; // Ngăn không cho kiểm tra lại khi đã đủ 20 câu
+        }
+
+        const inputElement = document.getElementById(`answer-${index}`);
+        const resultElement = document.getElementById(`result-${index}`);
+        const userAnswer = inputElement.value.trim().toLowerCase();
+        const correctAnswer = quizData[index].answer.toLowerCase();
+        const checkBtn = inputElement.nextElementSibling;
+
+        if (userAnswer === correctAnswer) {
+            resultElement.textContent = "Chính xác! ✅";
+            resultElement.className = "result correct";
+            correctAnswersCount++;
+        } else {
+            resultElement.textContent = `Sai rồi. Đáp án đúng là: "${quizData[index].answer}" ❌`;
+            resultElement.className = "result incorrect";
+        }
+
+        // Vô hiệu hóa ô nhập và nút "Kiểm tra" sau khi đã trả lời
+        inputElement.disabled = true;
+        checkBtn.disabled = true;
+        questionsAnswered++;
+
+        // Kiểm tra nếu đã trả lời đủ 20 câu
+        if (questionsAnswered === quizData.length) {
+            showSummary();
+        }
+    }
+
+    // Hàm hiển thị tổng kết
+    function showSummary() {
+        quizContainer.style.display = 'none'; // Ẩn phần câu hỏi
+        summarySection.style.display = 'block'; // Hiển thị phần tổng kết
+        scoreDisplay.textContent = `${correctAnswersCount} / ${quizData.length}`;
+    }
+</script>
+
+</body>
+</html>
